@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "menu-rich"
-version = "0.1.0"
+name = "rich-menu"
+version = "0.0.1"
 description = ""
 authors = ["gbPagano <guilhermebpagano@gmail.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "rich_menu"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -12,13 +12,15 @@ rich = "^12.5.1"
 click = "^8.1.3"
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
-ruff = "^0.0.127"
 pip-audit = "^2.4.5"
-flake8 = "^5.0.4"
-pydocstyle = "^6.1.1"
 isort = "^5.10.1"
+taskipy = "^1.12.2"
+ruff = "^0.1.6"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+format = { cmd = "isort . && ruff format .", help = "Formats the project source code" }
+lint = { cmd = "ruff .", help = "Run the linter in the project source code" }
