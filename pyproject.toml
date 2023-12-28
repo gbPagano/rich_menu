@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rich-menu"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["gbPagano <guilhermebpagano@gmail.com>"]
 readme = "README.md"
@@ -16,8 +16,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-rich = "^12.5.1"
+rich = "^13.7.0"
 click = "^8.1.3"
+ruff = "^0.1.9"
 
 [tool.poetry.group.dev.dependencies]
 pip-audit = "^2.4.5"
