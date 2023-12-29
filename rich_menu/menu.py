@@ -30,13 +30,13 @@ class Menu:
         match click.getchar():
             case "\r":
                 return "enter"
-            case "\x1b[B" | "s" | "S":
+            case "\x1b[B" | "s" | "S" | "àP": 
                 return "down"
-            case "\x1b[A" | "w" | "W":
+            case "\x1b[A" | "w" | "W" | "àH":
                 return "up"
-            case "\x1b[D" | "a" | "A":
+            case "\x1b[D" | "a" | "A" | "àK":
                 return "left"
-            case "\x1b[C" | "d" | "D":
+            case "\x1b[C" | "d" | "D" | "àM":
                 return "right"
             case "\x1b":
                 return "exit"
