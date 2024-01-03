@@ -90,14 +90,17 @@ class Menu:
         with Live(self._group, auto_refresh=False, screen=screen) as live:
             live.update(self._group, refresh=True)
             while True:
-                key = self._get_click()
-                if key == "enter":
-                    break
-                elif key == "exit" and esc:
-                    exit()
+                try:
+                    key = self._get_click()
+                    if key == "enter":
+                        break
+                    elif key == "exit" and esc:
+                        exit()
 
-                self._update_index(key)
-                live.update(self._group, refresh=True)
+                    self._update_index(key)
+                    live.update(self._group, refresh=True)
+                except KeyboardInterrupt:
+                    exit()
 
         if not screen:
             self._clean_menu()
