@@ -99,7 +99,7 @@ class Menu:
 
                     self._update_index(key)
                     live.update(self._group, refresh=True)
-                except KeyboardInterrupt:
+                except (KeyboardInterrupt, EOFError):
                     exit()
 
         if not screen:

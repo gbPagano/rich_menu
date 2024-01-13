@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rich-menu"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 authors = ["gbPagano <guilhermebpagano@gmail.com>"]
 readme = "README.md"
