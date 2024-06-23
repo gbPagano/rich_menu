@@ -6,7 +6,7 @@ def main() -> None:
         "Player 1 (X)",
         "Player 2 (O)",
         color="cyan",
-        rule_title="",
+        title="",
         align="left",
         panel_title="Tic Tac Toe",
         selection_char="+",

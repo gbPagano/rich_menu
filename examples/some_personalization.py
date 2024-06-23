@@ -6,7 +6,7 @@ def main() -> None:
         "X",
         "O",
         color="blue",
-        rule_title="Tic Tac Toe",
+        title="Tic Tac Toe",
         align="center",
         panel_title="Choose your icon",
         selection_char="->",
