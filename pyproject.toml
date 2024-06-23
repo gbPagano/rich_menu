@@ -1,13 +1,12 @@
 [tool.poetry]
 name = "rich-menu"
-version = "0.1.5"
+version = "0.2.0"
 description = ""
 authors = ["gbPagano <guilhermebpagano@gmail.com>"]
 readme = "README.md"
 packages = [{include = "rich_menu"}]
 classifiers = [  
     "Environment :: Console",
-    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3.10",
 ]
 
