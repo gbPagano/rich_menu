@@ -1,5 +1,5 @@
 import click
-from rich.align import Align
+from rich.align import Align, AlignMethod
 from rich.console import Group
 from rich.live import Live
 from rich.panel import Panel
@@ -17,8 +17,10 @@ class Menu:
         panel: bool = True,
         panel_title: str = "",
         color: str = "bold green",
-        align: str = "center",
+        align: AlignMethod = "center",
         selection_char: str = ">",
+        selected_char: str = "*",
+        selected_color: str = "bold blue",
         highlight_color: str = "",
     ):
         self.options = options
@@ -31,12 +33,15 @@ class Menu:
         self.align = align
         self.selection_char = selection_char
         self.highlight_color = highlight_color
+        self.selected_char = selected_char
+        self.selected_color = selected_color
+        self.selected_options = []
 
     def _get_click(self) -> str | None:
         match click.getchar():
             case "\r":
                 return "enter"
-            case "\x1b[B" | "s" | "S" | "àP": 
+            case "\x1b[B" | "s" | "S" | "àP":
                 return "down"
             case "\x1b[A" | "w" | "W" | "àH":
                 return "up"
@@ -44,12 +49,14 @@ class Menu:
                 return "left"
             case "\x1b[C" | "d" | "D" | "àM":
                 return "right"
+            case " " | "\x0d":
+                return "space"
             case "\x1b":
                 return "exit"
             case _:
                 return None
 
-    def _update_index(self, key: str) -> int:
+    def _update_index(self, key: str | None) -> None:
         if key == "down":
             self.index += 1
         elif key == "up":
@@ -70,6 +77,8 @@ class Menu:
         for idx, option in enumerate(self.options):
             if idx == self.index: # is selected
                 menu.append(Text.assemble(selected, Text(option + "\n", self.highlight_color)))
+            elif option in self.selected_options:  # is selected in multiple selection mode
+                menu.append(Text.assemble(Text(self.selected_char + " ", self.selected_color), Text(option + "\n", self.selected_color)))
             else:
                 menu.append(Text.assemble(not_selected, option + "\n"))
         menu.rstrip()
@@ -95,7 +104,7 @@ class Menu:
         for _ in range(len(self.options) + rule + panel):
             print("\x1B[A\x1B[K", end="")
 
-    def ask(self, screen: bool = True, esc: bool = True):
+    def ask(self, screen: bool = True, esc: bool = True) -> str:
         with Live(self._group, auto_refresh=False, screen=screen) as live:
             live.update(self._group, refresh=True)
             while True:
@@ -115,3 +124,33 @@ class Menu:
             self._clean_menu()
 
         return self.options[self.index]
+
+    def ask_multiple(
+        self, screen: bool = True, esc: bool = True,
+    ) -> list[str]:
+        self.selected_options = []
+        with Live(self._group, auto_refresh=False, screen=screen) as live:
+            live.update(self._group, refresh=True)
+            while True:
+                try:
+                    key = self._get_click()
+                    if key == "enter":
+                        break
+                    elif key == "exit" and esc:
+                        exit()
+                    elif key == "down" or key == "up":
+                        self._update_index(key)
+                    elif key == "space":
+                        if self.options[self.index] in self.selected_options:
+                            self.selected_options.remove(self.options[self.index])
+                        else:
+                            self.selected_options.append(self.options[self.index])
+
+                    live.update(self._group, refresh=True)
+                except (KeyboardInterrupt, EOFError):
+                    exit()
+
+        if not screen:
+            self._clean_menu()
+
+        return self.selected_options
