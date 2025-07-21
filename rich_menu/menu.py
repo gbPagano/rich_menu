@@ -71,14 +71,17 @@ class Menu:
     def _group(self) -> Group:
         menu = Text(justify="left")
 
-        selected = Text(self.selection_char + " ", self.color)
+        current = Text(self.selection_char + " ", self.color)
         not_selected = Text(" " * (len(self.selection_char) + 1))
+        selected = Text(self.selected_char + " ", self.selected_color)
 
         for idx, option in enumerate(self.options):
-            if idx == self.index: # is selected
-                menu.append(Text.assemble(selected, Text(option + "\n", self.highlight_color)))
+            if idx == self.index and option in self.selected_options: # is current selected in multiple selection mode
+                menu.append(Text.assemble(current, Text(option + "\n", self.selected_color)))
+            elif idx == self.index: # is selected in single mode
+                menu.append(Text.assemble(current, Text(option + "\n", self.highlight_color)))
             elif option in self.selected_options:  # is selected in multiple selection mode
-                menu.append(Text.assemble(Text(self.selected_char + " ", self.selected_color), Text(option + "\n", self.selected_color)))
+                menu.append(Text.assemble(selected, Text(option + "\n", self.selected_color)))
             else:
                 menu.append(Text.assemble(not_selected, option + "\n"))
         menu.rstrip()
